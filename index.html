@@ -37,13 +37,33 @@
         </select>
     </div>
 
+    <button id="calculateBtn">Calculate Sun Time</button>
+    <p id="sunTimeResult"></p>
 
 
     <script>
         const locationBtn = document.getElementById("locationBtn");
         const locationInfo = document.getElementById("locationInfo");
         const uvInfo = document.getElementById("uvInfo");
+        const skinTypeSelect = document.getElementById("skinTypeSelect");
+        const spfSelect = document.getElementById("spfSelect");
+        const calculateBtn = document.getElementById("calculateBtn");
+        const sunTimeResult = document.getElementById("sunTimeResult");
+    
+        
         const apiKey = "c5965e1bc65e4ae2bff60e9df7350176"; // <-- IMPORTANT: Replace with your Weatherbit API key
+        let currentUVIndex = 0; // Variable to store the UV index
+
+        // Self-protection times in minutes for each skin type
+        const selfProtectionTimes = {
+            "1": 10,
+            "2": 15,
+            "3": 20,
+            "4": 30,
+            "5": 45,
+            "6": 60
+        };
+
 
         locationBtn.addEventListener("click", () => {
             if (navigator.geolocation) {
@@ -52,6 +72,20 @@
                 locationInfo.innerHTML = "Geolocation is not supported by this browser.";
             }
         });
+
+        calculateBtn.addEventListener("click", () => {
+            const skinType = skinTypeSelect.value;
+            const spf = spfSelect.value;
+            const selfProtectionTime = selfProtectionTimes[skinType];
+
+            if (currentUVIndex > 0) {
+                const maxSunTime = (selfProtectionTime * spf) / currentUVIndex;
+                sunTimeResult.innerHTML = `You can stay in the sun for approximately ${Math.round(maxSunTime)} minutes.`;
+            } else {
+                sunTimeResult.innerHTML = "Please get the current UV index first.";
+            }
+        });
+
 
 
         function getUVIndex(lat, lon) {
@@ -69,6 +103,7 @@
                     const cityName = data.city_name;
                     const countryCode = data.country_code;
                     const uvIndex = data.data[0].uv;
+                    currentUVIndex = uvIndex; // Store the UV index
 
                     // Add city and country to the location info for a sanity check
                     locationInfo.innerHTML += `<br>Location: ${cityName}, ${countryCode}`;

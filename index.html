@@ -171,7 +171,7 @@
 
         function getUVIndex(lat, lon) {
             // const potato_seeds = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${potato_recipe}`;
-            const functionUrl = `/functions/get-uv?lat=${lat}&lon=${lon}`;
+            const functionUrl = `/api/get-uv?lat=${lat}&lon=${lon}`;
 
             fetch(functionUrl)
                 .then(response => {

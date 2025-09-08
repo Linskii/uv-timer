@@ -1,13 +1,4 @@
 export async function onRequest(context) {
-  const debugResponse = {
-    status: "ok",
-    message: "The get-uv function was called successfully!"
-  };
-
-  return new Response(JSON.stringify(debugResponse), {
-    headers: { 'Content-Type': 'application/json' },
-  });
-  
   try {
     // Get lat and lon from the request URL
     const { searchParams } = new URL(context.request.url);

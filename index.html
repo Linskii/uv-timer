@@ -91,6 +91,7 @@
         <button id="locationBtn">📍 UV Index basierend auf Standort bestimmen</button>
         <p id="locationInfo"></p>
         <p id="uvInfo"></p> 
+        <p id="apiCount"></p> 
 
 
         <div>
@@ -126,6 +127,7 @@
         const locationBtn = document.getElementById("locationBtn");
         const locationInfo = document.getElementById("locationInfo");
         const uvInfo = document.getElementById("uvInfo");
+        const apiCount = document.getElementById("apiCount"); // Get the new element
         const skinTypeSelect = document.getElementById("skinTypeSelect");
         const spfSelect = document.getElementById("spfSelect");
         const calculateBtn = document.getElementById("calculateBtn");
@@ -188,10 +190,14 @@
                         uvInfo.innerHTML = data.error;
                         return;
                     }
+
+                    const weatherData = data.weather;
+                    const callsLeft = data.apiCallsRemaining;
+
                     // Extract city, country, and UV index from the response
-                    const cityName = data.city_name;
-                    const countryCode = data.country_code;
-                    const uvIndex = data.data[0].uv;
+                    const cityName = weatherData.city_name;
+                    const countryCode = weatherData.country_code;
+                    const uvIndex = weatherData.data[0].uv;
                     currentUVIndex = uvIndex; // Store the UV index
 
                     // Add city and country to the location info for a sanity check
@@ -199,6 +205,10 @@
                     
                     // Display the UV index for the current day
                     uvInfo.innerHTML = "Heutiger maximaler UV index: " + uvIndex;
+
+                    // Display the remaining API calls
+                    apiCount.innerHTML = `Verbleibende API-Anfragen für heute: ${callsLeft}`;
+                    // --- CHANGE ENDS HERE ---
                 })
                 .catch(error => {
                     uvInfo.innerHTML = error.message || "Failed to fetch UV index.";

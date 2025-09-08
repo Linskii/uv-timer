@@ -24,7 +24,8 @@ export async function onRequest(context) {
 
   // Decrement the count and save it back to KV.
   // We set it to expire in 2 days (172800 seconds) to automatically clean up old keys.
-  await kv.put(key, (count - 1).toString(), { expirationTtl: 172800 });
+  const remainingCalls = count - 1;
+  await kv.put(key, remainingCalls.toString(), { expirationTtl: 172800 });
   // --- End of API Limit Logic ---
 
   // If the limit was not reached, proceed with the original function logic.
@@ -46,9 +47,21 @@ export async function onRequest(context) {
     const apiUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${apiKey}`;
     const apiResponse = await fetch(apiUrl);
 
-    return new Response(apiResponse.body, {
+    if (!apiResponse.ok) {
+      // Forward the error from the weather API if it fails
+      return new Response(apiResponse.body, { status: apiResponse.status, headers: apiResponse.headers });
+    }
+
+    const weatherData = await apiResponse.json();
+
+    // Combine the weather data and the remaining call count
+    const combinedData = {
+      weather: weatherData,
+      apiCallsRemaining: remainingCalls
+    };
+
+    return new Response(JSON.stringify(combinedData), {
       headers: { 'Content-Type': 'application/json' },
-      status: apiResponse.status,
     });
 
   } catch (error) {

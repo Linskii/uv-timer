@@ -132,7 +132,7 @@
         const sunTimeResult = document.getElementById("sunTimeResult");
     
         
-        const potato_recipe = "c5965e1bc65e4ae2bff60e9df7350176"; 
+        // const potato_recipe = "c5965e1bc65e4ae2bff60e9df7350176"; 
         let currentUVIndex = 0; // Variable to store the UV index
 
         // Self-protection times in minutes for each skin type
@@ -179,6 +179,8 @@
                     }
                     return response.json();
                 })
+
+
                 .then(data => {
                     // Extract city, country, and UV index from the response
                     const cityName = data.city_name;

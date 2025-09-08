@@ -5,30 +5,29 @@
     <title>Sun Calculator Project</title>
 </head>
 <body>
-    <h1>Sun Calculator Project Page</h1>
-    <p>If you can see this, the project page is working correctly!</p>
+    <h1>Wie lange kann ich in der Sonne bleiben? </h1>
 
-    <button id="locationBtn">Get My Location</button>
+    <button id="locationBtn">Aktuelle Position bestimmen</button>
     <p id="locationInfo"></p>
     <p id="uvInfo"></p>
 
 
     <div>
-        <label for="skinTypeSelect">Select your skin type:</label>
+        <label for="skinTypeSelect">Wählen Sie Ihren Hauttyp:</label>
         <select name="skin-type" id="skinTypeSelect">
-            <option value="1">Type 1 (Very fair, always burns, never tans)</option>
-            <option value="2">Type 2 (Fair, usually burns, tans with difficulty)</option>
-            <option value="3">Type 3 (Fair to beige, sometimes burns, tans gradually)</option>
-            <option value="4">Type 4 (Light brown, rarely burns, tans with ease)</option>
-            <option value="5">Type 5 (Brown, very rarely burns, tans very easily)</option>
-            <option value="6">Type 6 (Dark brown to black, never burns, tans very easily)</option>
+            <option value="1">Typ 1 (Sehr hell, immer Sonnenbrand, bräunt nie)</option>
+            <option value="2">Typ 2 (Hell, meistens Sonnenbrand, bräunt langsam)</option>
+            <option value="3">Typ 3 (Hell bis beige, manchmal Sonnenbrand, bräunt allmählich)</option>
+            <option value="4">Typ 4 (Hellbraun, selten Sonnenbrand, bräunt leicht)</option>
+            <option value="5">Typ 5 (Braun, sehr selten Sonnenbrand, bräunt sehr leicht)</option>
+            <option value="6">Typ 6 (Dunkelbraun bis schwarz, nie Sonnenbrand, bräunt sehr leicht)</option>
         </select>
     </div>
 
     <div>
-        <label for="spfSelect">Select your sunscreen (LSF):</label>
+        <label for="spfSelect">Wählen Sie Ihren Sonnenschutz (LSF):</label>
         <select name="spf" id="spfSelect">
-            <option value="1">No sunscreen</option>
+            <option value="1">Kein Sonnenschutz</option>
             <option value="10">LSF 10</option>
             <option value="20">LSF 20</option>
             <option value="30">LSF 30</option>
@@ -37,7 +36,7 @@
         </select>
     </div>
 
-    <button id="calculateBtn">Calculate Sun Time</button>
+    <button id="calculateBtn">Sonnenzeit ausrechnen</button>
     <p id="sunTimeResult"></p>
 
 
@@ -80,9 +79,9 @@
 
             if (currentUVIndex > 0) {
                 const maxSunTime = (selfProtectionTime * spf) / currentUVIndex;
-                sunTimeResult.innerHTML = `You can stay in the sun for approximately ${Math.round(maxSunTime)} minutes.`;
+                sunTimeResult.innerHTML = `Du kannst für ungefähr ${Math.round(maxSunTime)} minuten in der Sonne bleiben.`;
             } else {
-                sunTimeResult.innerHTML = "Please get the current UV index first.";
+                sunTimeResult.innerHTML = "Bitte bestimme zuerst den aktuellen maximalen UV index anhand deiner Position.";
             }
         });
 
@@ -106,10 +105,10 @@
                     currentUVIndex = uvIndex; // Store the UV index
 
                     // Add city and country to the location info for a sanity check
-                    locationInfo.innerHTML += `<br>Location: ${cityName}, ${countryCode}`;
+                    locationInfo.innerHTML += `<br>Ort: ${cityName}, ${countryCode}`;
                     
                     // Display the UV index for the current day
-                    uvInfo.innerHTML = "UV Index for today: " + uvIndex;
+                    uvInfo.innerHTML = "Heutiger maximaler UV index: " + uvIndex;
                 })
                 .catch(error => {
                     uvInfo.innerHTML = "Failed to fetch UV index.";
@@ -120,8 +119,8 @@
         function showPosition(position) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
-            locationInfo.innerHTML = "Latitude: " + lat +
-                                     "<br>Longitude: " + lon;
+            locationInfo.innerHTML = "Breitengrad: " + lat +
+                                     "<br>Längengrad: " + lon;
             // Call getUVIndex after getting the position
             getUVIndex(lat, lon);
         }

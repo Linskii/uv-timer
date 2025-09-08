@@ -14,6 +14,8 @@
     <script>
         const locationBtn = document.getElementById("locationBtn");
         const locationInfo = document.getElementById("locationInfo");
+        const uvInfo = document.getElementById("uvInfo");
+        const apiKey = "c5965e1bc65e4ae2bff60e9df7350176"; // <-- IMPORTANT: Replace with your Weatherbit API key
 
         locationBtn.addEventListener("click", () => {
             if (navigator.geolocation) {
@@ -23,9 +25,42 @@
             }
         });
 
+
+        function getUVIndex(lat, lon) {
+            const apiUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${apiKey}`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Extract city, country, and UV index from the response
+                    const cityName = data.city_name;
+                    const countryCode = data.country_code;
+                    const uvIndex = data.data[0].uv;
+
+                    // Add city and country to the location info for a sanity check
+                    locationInfo.innerHTML += `<br>Location: ${cityName}, ${countryCode}`;
+                    
+                    // Display the UV index for the current day
+                    uvInfo.innerHTML = "UV Index for today: " + uvIndex;
+                })
+                .catch(error => {
+                    uvInfo.innerHTML = "Failed to fetch UV index.";
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+
         function showPosition(position) {
-            locationInfo.innerHTML = "Latitude: " + position.coords.latitude +
-                                     "<br>Longitude: " + position.coords.longitude;
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            locationInfo.innerHTML = "Latitude: " + lat +
+                                     "<br>Longitude: " + lon;
+            // Call getUVIndex after getting the position
+            getUVIndex(lat, lon);
         }
 
         function showError(error) {

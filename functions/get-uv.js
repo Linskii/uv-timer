@@ -11,6 +11,15 @@ export async function onRequest(context) {
   // Get the secret API key from Cloudflare's environment variables
   const apiKey = context.env.WEATHERBIT_API_KEY;
 
+  // --- DEBUG LOGGING ---
+  // Check if the API key was found.
+  if (!apiKey) {
+    console.error("CRITICAL: WEATHERBIT_API_KEY environment variable not found!");
+    return new Response('Server configuration error', { status: 500 });
+  }
+  console.log("API Key found. Proceeding to fetch from Weatherbit.");
+  // --- END DEBUG LOGGING ---
+
   // Construct the API URL
   const apiUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${apiKey}`;
 

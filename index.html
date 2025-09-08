@@ -7,5 +7,43 @@
 <body>
     <h1>Sun Calculator Project Page</h1>
     <p>If you can see this, the project page is working correctly!</p>
+
+    <button id="locationBtn">Get My Location</button>
+    <p id="locationInfo"></p>
+
+    <script>
+        const locationBtn = document.getElementById("locationBtn");
+        const locationInfo = document.getElementById("locationInfo");
+
+        locationBtn.addEventListener("click", () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                locationInfo.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        });
+
+        function showPosition(position) {
+            locationInfo.innerHTML = "Latitude: " + position.coords.latitude +
+                                     "<br>Longitude: " + position.coords.longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    locationInfo.innerHTML = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    locationInfo.innerHTML = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    locationInfo.innerHTML = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    locationInfo.innerHTML = "An unknown error occurred."
+                    break;
+            }
+        }
+    </script>
 </body>
 </html>

@@ -132,7 +132,7 @@
         const sunTimeResult = document.getElementById("sunTimeResult");
     
         
-        const apiKey = "c5965e1bc65e4ae2bff60e9df7350176"; // <-- IMPORTANT: Replace with your Weatherbit API key
+        const potato_recipe = "c5965e1bc65e4ae2bff60e9df7350176"; 
         let currentUVIndex = 0; // Variable to store the UV index
 
         // Self-protection times in minutes for each skin type
@@ -170,9 +170,9 @@
 
 
         function getUVIndex(lat, lon) {
-            const apiUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${apiKey}`;
+            const potato_seeds = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${potato_recipe}`;
 
-            fetch(apiUrl)
+            fetch(potato_seeds)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok ' + response.statusText);

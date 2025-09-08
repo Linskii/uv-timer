@@ -3,41 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Sun Calculator Project</title>
+        <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            text-align: center;
+            color: #1c1e21;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+        div {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #606770;
+        }
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #1877f2;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #166fe5;
+        }
+        p {
+            color: #606770;
+            line-height: 1.5;
+        }
+        #sunTimeResult {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1c1e21;
+            margin-top: 1.5rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Wie lange kann ich in der Sonne bleiben? </h1>
+        
+    <div class="container">
 
-    <button id="locationBtn">Aktuelle Position bestimmen</button>
-    <p id="locationInfo"></p>
-    <p id="uvInfo"></p>
+        <h1>Wie lange kann ich in der Sonne bleiben? </h1>
+
+        <button id="locationBtn">Aktuelle Position bestimmen</button>
+        <p id="locationInfo"></p>
+        <p id="uvInfo"></p>
 
 
-    <div>
-        <label for="skinTypeSelect">Wählen Sie Ihren Hauttyp:</label>
-        <select name="skin-type" id="skinTypeSelect">
-            <option value="1">Typ 1 (Sehr hell, immer Sonnenbrand, bräunt nie)</option>
-            <option value="2">Typ 2 (Hell, meistens Sonnenbrand, bräunt langsam)</option>
-            <option value="3">Typ 3 (Hell bis beige, manchmal Sonnenbrand, bräunt allmählich)</option>
-            <option value="4">Typ 4 (Hellbraun, selten Sonnenbrand, bräunt leicht)</option>
-            <option value="5">Typ 5 (Braun, sehr selten Sonnenbrand, bräunt sehr leicht)</option>
-            <option value="6">Typ 6 (Dunkelbraun bis schwarz, nie Sonnenbrand, bräunt sehr leicht)</option>
-        </select>
+        <div>
+            <label for="skinTypeSelect">Wählen Sie Ihren Hauttyp:</label>
+            <select name="skin-type" id="skinTypeSelect">
+                <option value="1">Typ 1 (Sehr hell, immer Sonnenbrand, bräunt nie)</option>
+                <option value="2">Typ 2 (Hell, meistens Sonnenbrand, bräunt langsam)</option>
+                <option value="3">Typ 3 (Hell bis beige, manchmal Sonnenbrand, bräunt allmählich)</option>
+                <option value="4">Typ 4 (Hellbraun, selten Sonnenbrand, bräunt leicht)</option>
+                <option value="5">Typ 5 (Braun, sehr selten Sonnenbrand, bräunt sehr leicht)</option>
+                <option value="6">Typ 6 (Dunkelbraun bis schwarz, nie Sonnenbrand, bräunt sehr leicht)</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="spfSelect">Wählen Sie Ihren Sonnenschutz (LSF):</label>
+            <select name="spf" id="spfSelect">
+                <option value="1">Kein Sonnenschutz</option>
+                <option value="10">LSF 10</option>
+                <option value="20">LSF 20</option>
+                <option value="30">LSF 30</option>
+                <option value="40">LSF 40</option>
+                <option value="50">LSF 50</option>
+            </select>
+        </div>
+
+        <button id="calculateBtn">Sonnenzeit ausrechnen</button>
+        <p id="sunTimeResult"></p>
     </div>
-
-    <div>
-        <label for="spfSelect">Wählen Sie Ihren Sonnenschutz (LSF):</label>
-        <select name="spf" id="spfSelect">
-            <option value="1">Kein Sonnenschutz</option>
-            <option value="10">LSF 10</option>
-            <option value="20">LSF 20</option>
-            <option value="30">LSF 30</option>
-            <option value="40">LSF 40</option>
-            <option value="50">LSF 50</option>
-        </select>
-    </div>
-
-    <button id="calculateBtn">Sonnenzeit ausrechnen</button>
-    <p id="sunTimeResult"></p>
 
 
     <script>

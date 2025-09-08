@@ -1,6 +1,34 @@
 export async function onRequest(context) {
+  // --- Daily API Limit Logic ---
+  const kv = context.env.API_LIMITER;
+  const today = new Date().toISOString().split('T')[0]; // Creates a "YYYY-MM-DD" string
+  const key = `requests_${today}`;
+
+  let count = await kv.get(key);
+
+  // If it's a new day, the count will be null. Initialize it to 50.
+  if (count === null) {
+    count = 50;
+  } else {
+    count = parseInt(count);
+  }
+
+  // Check if the limit has been reached.
+  if (count <= 0) {
+    const errorResponse = { error: "Daily API limit reached. Please try again tomorrow." };
+    return new Response(JSON.stringify(errorResponse), {
+      status: 429, // HTTP status for "Too Many Requests"
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Decrement the count and save it back to KV.
+  // We set it to expire in 2 days (172800 seconds) to automatically clean up old keys.
+  await kv.put(key, (count - 1).toString(), { expirationTtl: 172800 });
+  // --- End of API Limit Logic ---
+
+  // If the limit was not reached, proceed with the original function logic.
   try {
-    // Get lat and lon from the request URL
     const { searchParams } = new URL(context.request.url);
     const lat = searchParams.get('lat');
     const lon = searchParams.get('lon');
@@ -9,29 +37,21 @@ export async function onRequest(context) {
       return new Response('Latitude and longitude are required', { status: 400 });
     }
 
-    // Get the secret API key from Cloudflare's environment variables
     const apiKey = context.env.WEATHERBIT_API_KEY;
 
-    // Check if the API key was found.
     if (!apiKey) {
-      // This is a critical server error, return a specific message
       return new Response('Server configuration error: API key not found.', { status: 500 });
     }
 
-    // Construct the API URL
     const apiUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${apiKey}`;
-
-    // Fetch data from the Weatherbit API
     const apiResponse = await fetch(apiUrl);
 
-    // Return the response from the Weatherbit API directly to the client
     return new Response(apiResponse.body, {
       headers: { 'Content-Type': 'application/json' },
       status: apiResponse.status,
     });
 
   } catch (error) {
-    // If any other error happens, return its message
     return new Response(error.message, { status: 500 });
   }
 }

@@ -132,7 +132,6 @@
         const sunTimeResult = document.getElementById("sunTimeResult");
     
         
-        // const potato_recipe = "c5965e1bc65e4ae2bff60e9df7350176"; 
         let currentUVIndex = 0; // Variable to store the UV index
 
         // Self-protection times in minutes for each skin type
@@ -170,11 +169,13 @@
 
 
         function getUVIndex(lat, lon) {
-            // const potato_seeds = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${potato_recipe}`;
             const functionUrl = `/get-uv?lat=${lat}&lon=${lon}`;
 
             fetch(functionUrl)
                 .then(response => {
+                    if (response.status === 429) {
+                        return response.json().then(err => { throw new Error(err.error); });
+                    }
                     if (!response.ok) {
                         throw new Error('Network response was not ok ' + response.statusText);
                     }
@@ -183,6 +184,10 @@
 
 
                 .then(data => {
+                    if (data.error) {
+                        uvInfo.innerHTML = data.error;
+                        return;
+                    }
                     // Extract city, country, and UV index from the response
                     const cityName = data.city_name;
                     const countryCode = data.country_code;
@@ -196,7 +201,7 @@
                     uvInfo.innerHTML = "Heutiger maximaler UV index: " + uvIndex;
                 })
                 .catch(error => {
-                    uvInfo.innerHTML = "Failed to fetch UV index.";
+                    uvInfo.innerHTML = error.message || "Failed to fetch UV index.";
                     console.error('There has been a problem with your fetch operation:', error);
                 });
         }

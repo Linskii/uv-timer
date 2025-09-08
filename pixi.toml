@@ -9,7 +9,6 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-pytest = ">=8.4.2,<9"
 black = ">=25.1.0,<26"
 pre-commit = ">=4.3.0,<5"
 

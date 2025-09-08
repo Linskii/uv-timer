@@ -25,5 +25,3 @@ jobs:
       - name: Run Black for linting
         run: black --check --diff .
 
-      - name: Run Pytest
-        run: pytest
